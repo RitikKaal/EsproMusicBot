@@ -1,7 +1,7 @@
   
 
 <h2 align="center">
-    ──「  🝐꯭𐏓꯭꯭ ⃪⧉⃞🅴𝐒𝙿ⓇᎧ🦋⃝🅼𝐔𝚂Ⓘ𝙲ᥣ᭄𝄄꯭꯭꯭⟭♥️─⃛͢•༎𓆪 」──
+    ──「  🝐꯭𐏓꯭꯭Espro Music 」──
 </h2>
 
 <p align="center">
@@ -21,7 +21,7 @@
     ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʟᴏᴄᴀʟ ʜᴏsᴛ/ ᴠᴘs 」─
 </h3>
 
-- Get your [🝐꯭𐏓꯭꯭ ⃪⧉⃞🅴𝐒𝙿ⓇᎧ🦋⃝🅼𝐔𝚂Ⓘ𝙲ᥣ᭄𝄄꯭꯭꯭⟭♥️─⃛͢•༎𓆪](https://github.com/RitikKaal/EsproMusicBot/blob/main/sample.env)
+- Get your [🝐꯭𐏓꯭꯭Espro Music༎𓆪](https://github.com/RitikKaal/EsproMusicBot/blob/main/sample.env)
 - Upgrade and Update by :
 `sudo apt-get update && sudo apt-get upgrade -y`
 - Install Ffmpeg by :
