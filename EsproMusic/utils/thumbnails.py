@@ -12,7 +12,8 @@ import numpy as np
 from config import YOUTUBE_IMG_URL
 
 
-
+def make_col():
+    return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
 
 def changeImageSize(maxWidth, maxHeight, image):
@@ -93,7 +94,7 @@ async def get_thumb(videoid):
             data = np.array(im)
             red, green, blue, alpha = data.T
 
-            
+            white_areas = (red == 255) & (blue == 255) & (green == 255)
             data[..., :-1][white_areas.T] = color
 
             im2 = Image.fromarray(data)
