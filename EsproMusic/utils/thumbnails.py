@@ -13,7 +13,7 @@ from config import YOUTUBE_IMG_URL
 
 
 def make_col():
-    return (white.randint(0,255),white.randint(0,255),white.randint(0,255))
+    return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
 
 def changeImageSize(maxWidth, maxHeight, image):
