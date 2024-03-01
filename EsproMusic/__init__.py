@@ -3,7 +3,7 @@ from EsproMusic.core.dir import dirr
 from EsproMusic.core.git import git
 from EsproMusic.core.userbot import Userbot
 from EsproMusic.misc import dbb, heroku
-
+from SafoneAPI import SafoneAPI
 from .logging import LOGGER
 
 dirr()
@@ -12,6 +12,7 @@ dbb()
 heroku()
 
 app = Ayush()
+api = SafoneAPI()
 userbot = Userbot()
 
 
