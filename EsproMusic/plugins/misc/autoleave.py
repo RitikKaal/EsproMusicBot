@@ -5,7 +5,7 @@ from pyrogram.enums import ChatType
 
 import config
 from EsproMusic import app
-from EsproMusic.core.call import Ayush, autoend
+from EsproMusic.core.call import Espro, autoend
 from EsproMusic.utils.database import get_client, is_active_chat, is_autoend
 
 
@@ -59,7 +59,7 @@ async def auto_end():
                     continue
                 autoend[chat_id] = {}
                 try:
-                    await Ayush.stop_stream(chat_id)
+                    await Espro.stop_stream(chat_id)
                 except:
                     continue
                 try:
