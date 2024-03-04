@@ -21,6 +21,8 @@ DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 5400))
 SONG_DOWNLOAD_DURATION = int(
     getenv("SONG_DOWNLOAD_DURATION_LIMIT", "5400")
 )
+
+PRIVATE_BOT_MODE = getenv("PRIVATE_BOT_MODE", None)
 # Chat id of a group for logging bot's activities
 LOGGER_ID = int(getenv("LOGGER_ID", ""))
 
@@ -50,8 +52,6 @@ AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", False))
 AUTO_SUGGESTION_MODE = getenv("AUTO_SUGGESTION_MODE", "True")
 AUTO_SUGGESTION_TIME = int(
     getenv("AUTO_SUGGESTION_TIME", "500"))
-
-PRIVATE_BOT_MODE = getenv("PRIVATE_BOT_MODE", None)
 
 # Get this credentials from https://developer.spotify.com/dashboard
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", None)
