@@ -1,137 +1,88 @@
 from pyrogram import filters
-import requests, random
-from bs4 import BeautifulSoup
-from EsproMusic import app
-import pytgcalls
-import os, yt_dlp 
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Message
-from pytgcalls.types import AudioVideoPiped
-from EsproMusic.plugins.play import play
-from EsproMusic.plugins.play.pornplay import play
+from pyrogram.types import Message
 
-#
-#####
+import config
+from strings import get_command
+from AnonX import app
+from AnonX.misc import SUDOERS
+from AnonX.utils.database import (add_private_chat,
+                                       get_private_served_chats,
+                                       is_served_private_chat,
+                                       remove_private_chat)
+from AnonX.utils.decorators.language import language
 
-vdo_link = {}
-
-keyboard = InlineKeyboardMarkup([
-        [
-            InlineKeyboardButton("⊝ ᴄʟᴏsᴇ ⊝", callback_data="close_data"), 
-            InlineKeyboardButton("⊝ ᴠᴘʟᴀʏ⊝", callback_data="play"),
-        ]
-])
+AUTHORIZE_COMMAND = get_command("AUTHORIZE_COMMAND")
+UNAUTHORIZE_COMMAND = get_command("UNAUTHORIZE_COMMAND")
+AUTHORIZED_COMMAND = get_command("AUTHORIZED_COMMAND")
 
 
-# Define your callback function
-@app.on_callback_query(filters.regex("^Pplay"))
-async def play_callback(_, query):
-    # You can add more logic here before initiating playback
-    await play(query.from_user.id)  # Assuming play function accepts user ID
-    await query.answer("Playback started!")
-        
-##########🖕
-
-@app.on_callback_query(filters.regex("^close_data"))
-async def close_callback(_, query):
-    chat_id = query.message.chat.id
-    await query.message.delete()
-
-async def get_video_stream(link):
-    ydl_opts = {
-        "format": "bestvideo+bestaudio/best",
-        "outtmpl": "downloads/%(id)s.%(ext)s",
-        "geo_bypass": True,
-        "nocheckcertificate": True,
-        "quiet": True,
-        "no_warnings": True,
-    }
-    x = yt_dlp.YoutubeDL(ydl_opts)
-    info = x.extract_info(link, False)
-    video = os.path.join(
-        "downloads", f"{info['id']}.{info['ext']}"
-    )
-    if os.path.exists(video):
-        return video
-    x.download([link])
-    return video
-
-
-
-
-
-
-
-def get_video_info(title):
-    url_base = f'https://www.xnxx.com/search/{title}'
+@app.on_message(filters.command(AUTHORIZE_COMMAND) & SUDOERS)
+@language
+async def authorize(client, message: Message, _):
+    if config.PRIVATE_BOT_MODE != str(True):
+        return await message.reply_text(_["pbot_12"])
+    if len(message.command) != 2:
+        return await message.reply_text(_["pbot_1"])
     try:
-        with requests.Session() as s:
-            r = s.get(url_base)
-            soup = BeautifulSoup(r.text, "html.parser")
-            video_list = soup.findAll('div', attrs={'class': 'thumb-block'})
-            if video_list:
-                random_video = random.choice(video_list)
-                thumbnail = random_video.find('div', class_="thumb").find('img').get("src")
-                if thumbnail:
-                    # Replace the size in the thumbnail URL to get 500x500
-                    thumbnail_500 = thumbnail.replace('/h', '/m').replace('/1.jpg', '/3.jpg')
-                    link = random_video.find('div', class_="thumb-under").find('a').get("href")
-                    if link and 'https://' not in link:  # Check if the link is a valid video link
-                        return {'link': 'https://www.xnxx.com' + link, 'thumbnail': thumbnail_500}
-    except Exception as e:
-        print(f"Error: {e}")
-    return None
-
-
-
-@app.on_message(filters.command("porn"))
-async def get_random_video_info(client, message):
-    if len(message.command) == 1:
-        await message.reply("Please provide a title to search.")
-        return
-
-    title = ' '.join(message.command[1:])
-    video_info = get_video_info(title)
-    
-    if video_info:
-        video_link = video_info['link']
-        video = await get_video_stream(video_link)
-        vdo_link[message.chat.id] = {'link': video_link}
-        keyboard1 = InlineKeyboardMarkup([
-            [
-                InlineKeyboardButton("⊝ ᴄʟᴏsᴇ ⊝", callback_data="close_data"), 
-                InlineKeyboardButton("⊝ ᴠᴘʟᴀʏ⊝", callback_data=f"vplay"),
-            ]
-    ])
-        await message.reply_video(video, caption=f"{title}", reply_markup=keyboard1)
-             
+        chat_id = int(message.text.strip().split()[1])
+    except:
+        return await message.reply_text(_["pbot_7"])
+    if not await is_served_private_chat(chat_id):
+        await add_private_chat(chat_id)
+        await message.reply_text(_["pbot_3"])
     else:
-        await message.reply(f"No video link found for '{title}'.")
-
-######
+        await message.reply_text(_["pbot_5"])
 
 
-@app.on_message(filters.command("xnxx"))
-async def get_random_video_info(client, message):
-    if len(message.command) == 1:
-        await message.reply("Please provide a title to search.")
-        return
-
-    title = ' '.join(message.command[1:])
-    video_info = get_video_info(title)
-    
-    if video_info:
-        video_link = video_info['link']
-        video = await get_video_stream(video_link)
-        
-        # Additional information
-        views = get_views_from_api(video_link)  # Replace with actual API call or logic to get views
-        ratings = get_ratings_from_api(video_link)  # Replace with actual API call or logic to get ratings
-
-        await message.reply_video(
-            video,
-            caption=f"Add Title: {title}\nViews: {views}\nRatings: {ratings}",
-            reply_markup=keyboard
-        )
+@app.on_message(filters.command(UNAUTHORIZE_COMMAND) & SUDOERS)
+@language
+async def unauthorize(client, message: Message, _):
+    if config.PRIVATE_BOT_MODE != str(True):
+        return await message.reply_text(_["pbot_12"])
+    if len(message.command) != 2:
+        return await message.reply_text(_["pbot_2"])
+    try:
+        chat_id = int(message.text.strip().split()[1])
+    except:
+        return await message.reply_text(_["pbot_7"])
+    if not await is_served_private_chat(chat_id):
+        return await message.reply_text(_["pbot_6"])
     else:
-        await message.reply(f"No video link found for '{title}'.")
-            
+        await remove_private_chat(chat_id)
+        return await message.reply_text(_["pbot_4"])
+
+
+@app.on_message(filters.command(AUTHORIZED_COMMAND) & SUDOERS)
+@language
+async def authorized(client, message: Message, _):
+    if config.PRIVATE_BOT_MODE != str(True):
+        return await message.reply_text(_["pbot_12"])
+    m = await message.reply_text(_["pbot_8"])
+    served_chats = []
+    text = _["pbot_9"]
+    chats = await get_private_served_chats()
+    for chat in chats:
+        served_chats.append(int(chat["chat_id"]))
+    count = 0
+    co = 0
+    msg = _["pbot_13"]
+    for served_chat in served_chats:
+        try:
+            title = (await app.get_chat(served_chat)).title
+            count += 1
+            text += f"{count}:- {title[:15]} [{served_chat}]\n"
+        except Exception:
+            title = _["pbot_10"]
+            co += 1
+            msg += f"{co}:- {title} [{served_chat}]\n"
+    if co == 0:
+        if count == 0:
+            return await m.edit(_["pbot_11"])
+        else:
+            return await m.edit(text)
+    else:
+        if count == 0:
+            await m.edit(msg)
+        else:
+            text = f"{text} {msg}"
+            return await m.edit(text)
