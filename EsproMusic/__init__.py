@@ -1,4 +1,4 @@
-from EsproMusic.core.bot import Ayush
+from EsproMusic.core.bot import Espro
 from EsproMusic.core.dir import dirr
 from EsproMusic.core.git import git
 from EsproMusic.core.userbot import Userbot
