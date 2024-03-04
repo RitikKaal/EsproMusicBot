@@ -22,7 +22,6 @@ SONG_DOWNLOAD_DURATION = int(
     getenv("SONG_DOWNLOAD_DURATION_LIMIT", "5400")
 )
 
-PRIVATE_BOT_MODE = getenv("PRIVATE_BOT_MODE", None)
 # Chat id of a group for logging bot's activities
 LOGGER_ID = int(getenv("LOGGER_ID", ""))
 
